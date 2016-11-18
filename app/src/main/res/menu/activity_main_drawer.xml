@@ -3,34 +3,53 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_guide"
+            android:icon="@drawable/ic_explore_black_24dp"
+            android:title="导航" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_switch"
+            android:icon="@drawable/switch5_drawer_72"
+            android:title="开关" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="连接自行车"
+            android:id="@+id/nav_connect"
+            android:icon="@drawable/bluetooth_setting_drawer"/>
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/setting_drawer"
+            android:title="设置" />
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/share_drawer"
+            android:title="分享"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="关于"
+        >
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_state"
+                android:title="state"
+                android:showAsAction="never"/>
+
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_version"
+                android:title="version:1.0"/>
+
         </menu>
+
     </item>
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_share"-->
+                <!--android:icon="@drawable/ic_menu_share"-->
+                <!--android:title="Share" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_send"-->
+                <!--android:icon="@drawable/ic_menu_send"-->
+                <!--android:title="Send" />-->
+        <!--</menu>-->
+    <!--</item>-->
 
 </menu>
