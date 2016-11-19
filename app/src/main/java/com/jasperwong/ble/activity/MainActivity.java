@@ -100,15 +100,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
-        mState=(MenuItem)drawer.findViewById(R.id.nav_guide);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+//        toggle.syncState();
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
+//        mState=(MenuItem)drawer.findViewById(R.id.nav_guide);
+
         Intent gattServiceIntent = new Intent(this, BLEService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
@@ -123,18 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (!mBluetoothAdapter.isEnabled()) {
             Intent mIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(mIntent, 1);
-        }
-    }
-
-    private void InitGPS(final Context context){
-        LocationManager locationManager
-                = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-        // 通过GPS卫星定位，定位级别可以精确到街（通过24颗卫星定位，在室外和空旷的地方定位准确、速度快）
-        boolean isOn = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if(!isOn){
-            Toast.makeText(this,"请手动打开位置信息,否则无法使用",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivityForResult(intent,0);
         }
     }
 
@@ -214,13 +203,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (BLEService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 Toast.makeText(MainActivity.this,"连接成功",Toast.LENGTH_LONG).show();
-//                Intent intent1=new Intent(MainActivity.this,RouteActivity.class);
-//                startActivity(intent1);
+                Intent intent1=new Intent(MainActivity.this,TestActivity.class);
+                startActivity(intent1);
 
             }  else if (BLEService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 List<BluetoothGattService> gattServiceList = mBluetoothLeService.getSupportedGattServices();
                 BluetoothGattCharacteristic mCharacteristic = GATTUtils.lookupGattServices(gattServiceList, GATTUtils.BLE_TX);
-                mCharacteristic.setValue("G");
+                mCharacteristic.setValue("connect success");
                 mBluetoothLeService.writeCharacteristic(mCharacteristic);
                 mBluetoothLeService.setCharacteristicNotification(mCharacteristic,true);
 
@@ -231,8 +220,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mConnected = false;
                 Toast.makeText(MainActivity.this,"断开连接",Toast.LENGTH_LONG).show();
             } else if (BLEService.ACTION_DATA_AVAILABLE.equals(action)) {
-                String Rx=intent.getStringExtra(BLEService.EXTRA_DATA);
-                Log.d("Rx","Rx:"+Rx);
+//                String Rx=intent.getStringExtra(BLEService.EXTRA_DATA);
+//                Log.d("Rx","Rx:"+Rx);
             }else if(BLEService.ACTION_DATA_READ.equals(action)){
 
             }
@@ -312,8 +301,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            Intent intent=new Intent(this,UserActivity.class);
 //            startActivity(intent);
 //        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
