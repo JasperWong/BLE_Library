@@ -142,9 +142,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 String Rx=intent.getStringExtra(BLEService.EXTRA_DATA);
                 Log.d("Rx_test",Rx);
 //                for(byte byteChar : Rx)
-                while(1){
 
-                }
 
 
 
