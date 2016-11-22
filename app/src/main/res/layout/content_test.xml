@@ -86,7 +86,7 @@
         android:background="@color/black"
         android:textColor="@color/white"
         android:textSize="20dp"
-        android:layout_height="100dp"
+        android:layout_height="250dp"
         android:text="rec"/>
     <RelativeLayout
         android:layout_width="match_parent"

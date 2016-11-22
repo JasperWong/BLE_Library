@@ -36,7 +36,16 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private EditText ed_send;
     private String show="";
     private Button btn_send;
+    private static int i=0;
+    private boolean RecIsDone=false;
+    public Byte[] RecBuffer;
+    public  enum  STATE{
+        WAIT_F,
+        WAIT_BLANK1,
+        WAIT_R,
+        WAIT_
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,14 +138,29 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 //                mConnected = false;
 //                Toast.makeText(MainActivity.this,"断开连接",Toast.LENGTH_LONG).show();
             } else if (BLEService.ACTION_DATA_AVAILABLE.equals(action)) {
+
                 String Rx=intent.getStringExtra(BLEService.EXTRA_DATA);
-                Log.d("Rx_test","Rx:"+Rx);
+                Log.d("Rx_test",Rx);
 //                for(byte byteChar : Rx)
-                show+=(Rx+" ");
-                RecShow.setText(Rx);
+                while(1){
+
+                }
 
 
-            }else if(BLEService.ACTION_DATA_READ.equals(action)){
+
+                //String RxString = new String(RecBuffer);
+                show+=Rx;
+                RecShow.setText(show);
+                i=RecShow.getLineCount();
+                i++;
+                if(i>=12){
+                    show="";
+                    i=0;
+                }
+
+
+
+            } else if(BLEService.ACTION_DATA_READ.equals(action)){
 
             }
         }
