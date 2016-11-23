@@ -10,73 +10,100 @@
     android:paddingTop="55dp"
     tools:context="com.jasperwong.ble.activity.TestActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/front_layout"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="前:"
-            android:textSize="20dp"
-            android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/FrontShowView"
-            android:text="front"
+            android:text="front:0"
             android:textSize="20dp"
-            android:textColor="@color/black"/>
-    </LinearLayout>
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="16dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/left_layout"
-        android:layout_below="@+id/front_layout"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="左:"
+            android:id="@+id/PShow_TV"
+            android:text="P:0"
             android:textSize="20dp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@id/FrontShowView"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ErrorShow_TV"
+            android:text="误差:0"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/FrontShowView"
+            />
+
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/LeftShowView"
-            android:text="left"
+            android:text="left:0"
             android:textSize="20dp"
-            android:textColor="@color/black"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/right_layout"
-        android:layout_below="@+id/left_layout"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+            android:textColor="@color/black"
+            android:layout_below="@id/FrontShowView"
+            android:layout_alignLeft="@id/FrontShowView"
+            android:layout_marginTop="16dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="右:"
+            android:id="@+id/IShow_TV"
+            android:text="I:0"
             android:textSize="20dp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:layout_alignLeft="@id/PShow_TV"
+            android:layout_below="@id/PShow_TV"
+            android:layout_alignTop="@id/LeftShowView"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ModeShow_TX"
+            android:text="模式:0"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:layout_alignTop="@id/LeftShowView"
+            android:layout_below="@id/ErrorShow_TV"
+            android:layout_alignLeft="@id/ErrorShow_TV"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/RightShowView"
-            android:text="right"
+            android:text="right:0"
             android:textSize="20dp"
-            android:textColor="@color/black"/>
-    </LinearLayout>
+            android:textColor="@color/black"
+            android:layout_below="@id/LeftShowView"
+            android:layout_alignLeft="@id/LeftShowView"
+            android:layout_marginTop="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/DShow_TV"
+            android:text="D:0"
+            android:layout_below="@id/IShow_TV"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:layout_alignLeft="@id/IShow_TV"
+            android:layout_alignTop="@id/RightShowView"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/IShow_View"
+            android:text="0"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:visibility="gone"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -86,7 +113,7 @@
         android:background="@color/black"
         android:textColor="@color/white"
         android:textSize="20dp"
-        android:layout_height="250dp"
+        android:layout_height="150dp"
         android:text="rec"/>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -105,6 +132,8 @@
             android:id="@+id/btn_send_view"
             android:layout_toRightOf="@id/edit_send_view"/>
     </RelativeLayout>
+
+
 
 
 </RelativeLayout>

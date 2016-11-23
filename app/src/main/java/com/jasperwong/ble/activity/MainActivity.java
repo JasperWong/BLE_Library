@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
         InitBLE();
+        startScan();
         mListView=(ListView)findViewById(R.id.list_device);
         mDeviceAdapter=new DeviceAdapter(this);
         mDeviceAdapter.setData(mDeviceList);

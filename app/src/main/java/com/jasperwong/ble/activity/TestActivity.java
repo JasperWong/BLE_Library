@@ -61,7 +61,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         if(id==R.id.btn_send_view){
             String Tx;
             Tx=ed_send.getText().toString();
-            mCharacteristic.setValue(Tx);
+            mCharacteristic.setValue(Tx+'\n');
             mBluetoothLeService.writeCharacteristic(mCharacteristic);
         }
     }
@@ -91,7 +91,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             if( null != mCharacteristic )
             {
 //                mCharacteristic.setValue("G");
-                mCharacteristic.setValue("service connect");
+//                mCharacteristic.setValue("service connect");
                 mBluetoothLeService.writeCharacteristic(mCharacteristic);
                 mBluetoothLeService.setCharacteristicNotification(mCharacteristic, true);
             }
@@ -118,7 +118,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             }  else if (BLEService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 List<BluetoothGattService> gattServiceList = mBluetoothLeService.getSupportedGattServices();
                 BluetoothGattCharacteristic mCharacteristic = GATTUtils.lookupGattServices(gattServiceList, GATTUtils.BLE_TX);
-                mCharacteristic.setValue("connect success");
+//                mCharacteristic.setValue("connect success");
                 mBluetoothLeService.writeCharacteristic(mCharacteristic);
                 mBluetoothLeService.setCharacteristicNotification(mCharacteristic,true);
 
@@ -137,9 +137,9 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                     String FrontDistance = intent.getStringExtra(BLEService.FRONT_DATA);
                     String LeftDistance = intent.getStringExtra(BLEService.LEFT_DATA);
                     String RightDistance = intent.getStringExtra(BLEService.RIGHT_DATA);
-                    FrontShow.setText(FrontDistance);
-                    LeftShow.setText(LeftDistance);
-                    RightShow.setText(RightDistance);
+                    FrontShow.setText("前:"+FrontDistance);
+                    LeftShow.setText("左:"+LeftDistance);
+                    RightShow.setText("右:"+RightDistance);
                     BLEService.RecIsDone = false;
                     BLEService.rec_state = BLEService.RecState.WAIT_F;
                     Log.d("Rx_test","Front:"+FrontDistance);
