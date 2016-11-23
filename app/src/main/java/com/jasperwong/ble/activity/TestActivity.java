@@ -37,15 +37,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private String show="";
     private Button btn_send;
     private static int i=0;
-    private boolean RecIsDone=false;
-    public Byte[] RecBuffer;
-    public  enum  STATE{
-        WAIT_F,
-        WAIT_BLANK1,
-        WAIT_R,
-        WAIT_
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,14 +130,22 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 //                Toast.makeText(MainActivity.this,"断开连接",Toast.LENGTH_LONG).show();
             } else if (BLEService.ACTION_DATA_AVAILABLE.equals(action)) {
 
+
+
                 String Rx=intent.getStringExtra(BLEService.EXTRA_DATA);
-                Log.d("Rx_test",Rx);
-//                for(byte byteChar : Rx)
-
-
-
-
-                //String RxString = new String(RecBuffer);
+                if(BLEService.RecIsDone) {
+                    String FrontDistance = intent.getStringExtra(BLEService.FRONT_DATA);
+                    String LeftDistance = intent.getStringExtra(BLEService.LEFT_DATA);
+                    String RightDistance = intent.getStringExtra(BLEService.RIGHT_DATA);
+                    FrontShow.setText(FrontDistance);
+                    LeftShow.setText(LeftDistance);
+                    RightShow.setText(RightDistance);
+                    BLEService.RecIsDone = false;
+                    BLEService.rec_state = BLEService.RecState.WAIT_F;
+                    Log.d("Rx_test","Front:"+FrontDistance);
+                    Log.d("Rx_test","Left:"+LeftDistance);
+                    Log.d("Rx_test","Right:"+RightDistance);
+                }
                 show+=Rx;
                 RecShow.setText(show);
                 i=RecShow.getLineCount();

@@ -74,15 +74,34 @@ public class BLEService extends Service
 
     public final static UUID UUID_HEART_RATE_MEASUREMENT =
             UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT);
-
-
     public final static UUID UUID_BLE_TX = UUID
             .fromString(SampleGattAttributes.BLE_TX);
     public final static UUID UUID_BLE_RX = UUID
             .fromString(SampleGattAttributes.BLE_RX);
     public final static UUID UUID_BLE_SERVICE = UUID
             .fromString(SampleGattAttributes.BLE_SERVICE);
+    public final static String FRONT_DATA =
+            "com.example.bluetooth.le.FRONT_DATA";
+    public final static String RIGHT_DATA =
+            "com.example.bluetooth.le.RIGHT_DATA";
+    public final static String LEFT_DATA =
+            "com.example.bluetooth.le.LEFT_DATA";
 
+
+    public  enum  RecState{
+        WAIT_F,
+        WAIT_COLON,
+        WAIT_BLANK1,
+        WAIT_L,
+        WAIT_BLANK2,
+        WAIT_R,
+        WAIT_NEWLINE,
+        PARSE_PENDING;
+    };
+
+    public static RecState rec_state=RecState.WAIT_F;
+
+    public static boolean RecIsDone=false;
 
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
@@ -193,9 +212,78 @@ public class BLEService extends Service
     {
         final Intent intent = new Intent(action);
         final byte[] data = characteristic.getValue();
+        String FrontDistance;
+        String LeftDistance;
+        String RightDistance;
+        final StringBuilder Front=new StringBuilder();
+        final StringBuilder Left=new StringBuilder();
+        final StringBuilder Right=new StringBuilder();
+
 //        Log.d("usart",data+"");
-        if (data != null && data.length > 0) {
-            final StringBuilder stringBuilder = new StringBuilder(data.length);
+        if (!RecIsDone&&data != null && data.length > 0) {
+           for(byte byteChar :data){
+                switch(rec_state){
+                    case WAIT_F: {
+                        if(byteChar=='F') rec_state = RecState.WAIT_COLON;
+                        else rec_state=RecState.WAIT_F;
+                        break;
+                    }
+                    case WAIT_COLON:{
+                        if(byteChar==':')   rec_state = RecState.WAIT_BLANK1;
+                        break;
+                    }
+
+                    case WAIT_BLANK1:{
+                        if(byteChar==' ') rec_state=RecState.WAIT_L;
+                        else Front.append(String.format("%c",byteChar));
+                        break;
+                    }
+                    case WAIT_L: {
+                        if(byteChar=='L') rec_state = RecState.WAIT_BLANK2;
+                        else rec_state=RecState.WAIT_L;
+                        break;
+                    }
+                    case WAIT_BLANK2:{
+                        if(byteChar==' ') rec_state=RecState.WAIT_R;
+                        else Left.append(String.format("%c",byteChar));
+                        break;
+                    }
+                    case WAIT_R: {
+                        if(byteChar=='R') rec_state = RecState.WAIT_NEWLINE;
+                        else rec_state=RecState.WAIT_R;
+                        break;
+                    }
+                    case WAIT_NEWLINE:{
+                        if(byteChar=='\n') rec_state=RecState.PARSE_PENDING;
+                        else Right.append(String.format("%c",byteChar));
+                        break;
+                    }
+                    case PARSE_PENDING: {
+                        RecIsDone=true;
+                        FrontDistance=Front.toString();
+                        LeftDistance=Left.toString();
+                        RightDistance=Right.toString();
+                        Log.d("rx_init","front:"+FrontDistance+" "+"left:"+LeftDistance+" "+"right:"+RightDistance);
+                        intent.putExtra(FRONT_DATA,FrontDistance);
+                        intent.putExtra(LEFT_DATA,LeftDistance);
+                        intent.putExtra(RIGHT_DATA,RightDistance);
+                        Front.delete(0,Front.length());
+                        Left.delete(0,Left.length());
+                        Right.delete(0,Right.length());
+                        rec_state=RecState.WAIT_F;
+                        break;
+                    }
+
+                    default:{
+
+                        break;
+                    }
+                }
+
+
+            }
+
+
 //            for(byte byteChar : data)
 //                stringBuilder.append(String.format("%02X ", byteChar));
 //            intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
@@ -208,8 +296,10 @@ public class BLEService extends Service
 ////                intentCall.setData(Uri.parse("tel:123"));
 ////                startActivity(intentCall);
 //            }
-            Log.d("usart",new String(data));
+
         }
+        intent.putExtra(EXTRA_DATA,new String(data));
+        Log.d("usart",new String(data));
         sendBroadcast(intent);
     }
 
