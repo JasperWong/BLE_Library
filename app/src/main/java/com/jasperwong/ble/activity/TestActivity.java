@@ -1,5 +1,6 @@
 package com.jasperwong.ble.activity;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,10 +41,11 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private static int i=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_test);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_test);
+//        setSupportActionBar(toolbar);
         FrontShow=(TextView)findViewById(R.id.FrontShowView);
         LeftShow=(TextView)findViewById(R.id.LeftShowView);
         RightShow=(TextView)findViewById(R.id.RightShowView);

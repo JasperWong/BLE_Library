@@ -7,8 +7,36 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="55dp"
+    android:paddingTop="0dp"
     tools:context="com.jasperwong.ble.activity.TestActivity">
+
+    <com.jasperwong.ble.activity.WaverView
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/background_material_dark"
+        android:id="@+id/WaveView"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/PShow_TV"
+        android:text="P:0"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_alignTop="@id/WaveView"
+        android:layout_toRightOf="@id/WaveView"
+        android:layout_below="@id/FrontShowView"
+        />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/PSeekBarView"
+        android:layout_below="@id/PShow_TV"
+        android:layout_toRightOf="@+id/WaveView"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,16 +45,19 @@
         android:text="前:0"
         android:textSize="20dp"
         android:textColor="@color/black"
-        android:layout_marginTop="16dp"/>
+        android:layout_below="@+id/WaveView"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/LeftShowView"
         android:text="左:0"
         android:textSize="20dp"
+        android:layout_toLeftOf="@+id/FrontShowView"
         android:textColor="@color/black"
-        android:layout_centerHorizontal="true"
         android:layout_alignTop="@id/FrontShowView"
+        android:visibility="gone"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -36,17 +67,9 @@
         android:textSize="20dp"
         android:textColor="@color/black"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/FrontShowView"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/PShow_TV"
-            android:text="P:0"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:layout_alignLeft="@+id/FrontShowView"
-            android:layout_below="@id/FrontShowView"
-            android:layout_marginTop="16dp"/>
+        android:layout_alignTop="@id/FrontShowView"
+        android:visibility="gone"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,13 +102,7 @@
             android:textColor="@color/black"
             android:visibility="gone"/>
 
-    <com.jasperwong.ble.activity.WaverView
-        android:layout_width="match_parent"
-        android:layout_height="230dp"
-        android:layout_below="@id/PShow_TV"
-        android:background="@color/background_material_dark"
-        android:id="@+id/WaveView"
-        android:layout_marginTop="16dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -99,12 +116,7 @@
             android:layout_marginBottom="10dp"
             android:text="P:"
             />
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/SeekBarView"
-            android:layout_below="@+id/WaveView"
-            />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
