@@ -18,142 +18,218 @@
         android:id="@+id/WaveView"
         android:layout_marginTop="16dp"/>
 
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/PShow_TV"
-        android:text="P:0"
+        android:id="@+id/PSet_TV"
+        android:text="P:"
         android:textSize="20dp"
         android:textColor="@color/black"
         android:layout_alignTop="@id/WaveView"
         android:layout_toRightOf="@id/WaveView"
-        android:layout_below="@id/FrontShowView"
+        android:layout_marginLeft="115dp" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/PSet_ET"
+        android:layout_toRightOf="@+id/PSet_TV"
+        android:textSize="20dp"
+        android:text="0"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="10dp"
         />
-
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/PSeekBarView"
-        android:layout_below="@id/PShow_TV"
+        android:layout_below="@id/PSet_TV"
         android:layout_toRightOf="@+id/WaveView"
+        android:layout_marginTop="10dp"
         />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/FrontShowView"
-        android:text="前:0"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        android:layout_below="@+id/WaveView"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/LeftShowView"
-        android:text="左:0"
-        android:textSize="20dp"
-        android:layout_toLeftOf="@+id/FrontShowView"
-        android:textColor="@color/black"
-        android:layout_alignTop="@id/FrontShowView"
-        android:visibility="gone"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/RightShowView"
-        android:text="右:0"
-        android:textSize="20dp"
-        android:textColor="@color/black"
+    <Button
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/minus_48px"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/FrontShowView"
-        android:visibility="gone"/>
+        android:layout_alignTop="@id/PSet_TV"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="50dp"
+        android:id="@+id/PMinus_BTN"
+        />
+    <Button
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/plus_48px"
+        android:layout_toRightOf="@id/WaveView"
+        android:layout_alignTop="@id/PSet_TV"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="60dp"
+        android:id="@+id/PPlus_BTN"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/IShow_TV"
-            android:text="I:0"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:layout_alignLeft="@id/LeftShowView"
-            android:layout_alignTop="@id/PShow_TV"
-            />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/DShow_TV"
-            android:text="D:0"
-            android:layout_below="@id/IShow_TV"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:layout_alignLeft="@id/RightShowView"
-            android:layout_alignTop="@id/PShow_TV"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/IShow_View"
-            android:text="0"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:visibility="gone"/>
-
-
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ISet_TV"
+        android:layout_alignLeft="@+id/PSet_TV"
+        android:layout_below="@+id/PSeekBarView"
+        android:text="I :"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ISet_ET"
+        android:textSize="20dp"
+        android:text="0"
+        android:layout_marginTop="75dp"
+        android:layout_alignLeft="@+id/PSet_ET"
+        />
+    <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/WaveView"
-        android:layout_marginTop="16dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:layout_marginBottom="10dp"
-            android:text="P:"
-            />
+        android:id="@+id/ISeekBarView"
+        android:layout_below="@id/ISet_TV"
+        android:layout_toRightOf="@+id/WaveView"
+        android:layout_marginTop="10dp"
+        />
+    <Button
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/plus_48px"
+        android:layout_alignLeft="@id/PPlus_BTN"
+        android:layout_alignTop="@id/ISet_TV"
+        android:layout_marginTop="4dp"
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="update"/>
-    </LinearLayout>
+        android:id="@+id/IPlus_BTN"
+        />
 
-
+    <Button
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/minus_48px"
+        android:layout_alignTop="@id/IPlus_BTN"
+        android:layout_alignLeft="@+id/PMinus_BTN"
+        android:id="@+id/IMinus_BTN"
+        />
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:id="@+id/RecShow"
-        android:layout_above="@+id/send_layout"
-        android:layout_marginBottom="20dp"
-        android:background="@color/black"
-        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DSet_TV"
+        android:layout_below="@+id/ISeekBarView"
+        android:text="D:"
+        android:layout_alignRight="@+id/PSet_TV"
         android:textSize="20dp"
-        android:layout_height="150dp"
-        android:visibility="gone"
-        android:text="rec"/>
-    <RelativeLayout
+        android:textColor="@color/black"
+        />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DSet_ET"
+        android:textSize="20dp"
+        android:text="0"
+        android:layout_marginTop="145dp"
+        android:layout_alignLeft="@+id/PSet_ET"
+        />
+    <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/send_layout"
+        android:id="@+id/DSeekBarView"
+        android:layout_below="@id/DSet_TV"
+        android:layout_toRightOf="@+id/WaveView"
+        android:layout_marginTop="10dp"
+        />
+    <Button
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/plus_48px"
+        android:layout_alignLeft="@id/PPlus_BTN"
+        android:layout_alignTop="@id/DSet_TV"
+        android:layout_marginTop="4dp"
+        android:id="@+id/DPlus_BTN" />
+
+    <Button
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/minus_48px"
+        android:layout_alignTop="@id/DPlus_BTN"
+        android:layout_alignLeft="@+id/PMinus_BTN"
+        android:id="@+id/DMinus_BTN" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/DSeekBarView"
+        android:layout_toRightOf="@id/WaveView"
+        android:layout_marginLeft="90dp"
+        android:text="update"
+        android:layout_marginTop="10dp"
+        android:id="@+id/Update_BTN"/>
+
+    <TextView
+        android:id="@+id/PShow_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="P: 0"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_marginTop="15dp"
+        android:layout_alignTop="@id/Update_BTN"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
+        android:id="@+id/IShow_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I: 0"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_alignTop="@+id/PShow_TV"
+        android:layout_toRightOf="@+id/PShow_TV"
+        android:layout_marginLeft="30dp"/>
+
+    <TextView
+        android:id="@+id/DShow_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="D: 0"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_alignTop="@+id/PShow_TV"
+        android:layout_toRightOf="@+id/IShow_TV"
+        android:layout_marginLeft="30dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/AngleShow_TV"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:text="ANGLE: 0"
+        android:layout_alignTop="@id/PShow_TV"
+        android:layout_toRightOf="@id/DShow_TV"
+        android:layout_marginLeft="30dp"/>
+
+    <EditText
+        android:id="@+id/edit_send_view"
+        android:layout_height="wrap_content"
+        android:layout_width="390dp"
         android:layout_alignParentBottom="true"
-        android:textSize="20dp">
-        <EditText
-            android:id="@+id/edit_send_view"
-            android:layout_height="wrap_content"
-            android:layout_width="260dp" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="send"
-            android:id="@+id/btn_send_view"
-            android:layout_toRightOf="@id/edit_send_view"/>
-    </RelativeLayout>
+        android:layout_alignParentLeft="true"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="send"
+        android:id="@+id/btn_send_view"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/Update_BTN"/>
+
 
 
 

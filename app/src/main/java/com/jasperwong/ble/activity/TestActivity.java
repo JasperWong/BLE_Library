@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -41,21 +42,19 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private static int i=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_test);
 //        setSupportActionBar(toolbar);
-        FrontShow=(TextView)findViewById(R.id.FrontShowView);
-        LeftShow=(TextView)findViewById(R.id.LeftShowView);
-        RightShow=(TextView)findViewById(R.id.RightShowView);
-        RecShow=(TextView)findViewById(R.id.RecShow);
+//        RecShow=(TextView)findViewById(R.id.RecShow);
         btn_send=(Button)findViewById(R.id.btn_send_view);
         btn_send.setOnClickListener(this);
         ed_send=(EditText)findViewById(R.id.edit_send_view);
         Intent gattServiceIntent=new Intent(TestActivity.this,BLEService.class);
-        bindService(gattServiceIntent,mServiceConnection,BIND_AUTO_CREATE);
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+//        bindService(gattServiceIntent,mServiceConnection,BIND_AUTO_CREATE);
+//        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
     @Override
