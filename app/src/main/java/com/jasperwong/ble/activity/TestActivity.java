@@ -181,13 +181,14 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_send_view: {
                 String Tx;
                 Tx = ed_send.getText().toString();
-                mCharacteristic.setValue(Tx + '\n');
+                mCharacteristic.setValue(Tx + "\n");
                 mBluetoothLeService.writeCharacteristic(mCharacteristic);
                 break;
             }
             case R.id.Update_BTN: {
                 Log.d("update","update");
-                waverView.addData(300);
+                waverView.addData(200);
+                waverView.postInvalidate();
                 break;
             }
             case R.id.PPlus_BTN:{
