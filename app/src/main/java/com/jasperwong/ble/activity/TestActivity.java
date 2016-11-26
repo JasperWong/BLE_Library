@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,45 +27,230 @@ import com.jasperwong.ble.R;
 import com.jasperwong.ble.ble.BLEService;
 import com.jasperwong.ble.ble.GATTUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class TestActivity extends AppCompatActivity implements View.OnClickListener{
     private String TAG=this.getClass().getSimpleName();
     private BLEService mBluetoothLeService=null;
     BluetoothGattCharacteristic mCharacteristic=null;
-    private TextView FrontShow;
-    private TextView LeftShow;
-    private TextView RightShow;
-    private TextView RecShow;
     private EditText ed_send;
-    private String show="";
     private Button btn_send;
-    private static int i=0;
+    private Button PPlus;
+    private Button IPlus;
+    private Button DPlus;
+    private Button PMinus;
+    private Button IMinus;
+    private Button DMinus;
+    private Button Update;
+    private EditText PSet;
+    private EditText ISet;
+    private EditText DSet;
+    private SeekBar PSeek;
+    private SeekBar ISeek;
+    private SeekBar DSeek;
+    private TextView PShow;
+    private TextView IShow;
+    private TextView DShow;
+    private TextView AngleShow;
+    private float PsetValue=0;
+    private float IsetValue=0;
+    private float DsetValue=0;
+    private WaverView waverView=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_test);
-//        setSupportActionBar(toolbar);
-//        RecShow=(TextView)findViewById(R.id.RecShow);
+
+        waverView=(WaverView)findViewById(R.id.WaveView);
         btn_send=(Button)findViewById(R.id.btn_send_view);
         btn_send.setOnClickListener(this);
         ed_send=(EditText)findViewById(R.id.edit_send_view);
+        PPlus=(Button)findViewById(R.id.PPlus_BTN);
+        PMinus=(Button)findViewById(R.id.PMinus_BTN);
+        IPlus=(Button)findViewById(R.id.IPlus_BTN);
+        IMinus=(Button)findViewById(R.id.IMinus_BTN);
+        DPlus=(Button)findViewById(R.id.DPlus_BTN);
+        DMinus=(Button)findViewById(R.id.DMinus_BTN);
+        PPlus.setOnClickListener(this);
+        DPlus.setOnClickListener(this);
+        IPlus.setOnClickListener(this);
+        PMinus.setOnClickListener(this);
+        IMinus.setOnClickListener(this);
+        DMinus.setOnClickListener(this);
+
+        PSet=(EditText)findViewById(R.id.PSet_ET);
+        ISet=(EditText)findViewById(R.id.ISet_ET);
+        DSet=(EditText)findViewById(R.id.DSet_ET);
+
+        PSeek=(SeekBar)findViewById(R.id.PSeekBarView);
+        ISeek=(SeekBar)findViewById(R.id.ISeekBarView);
+        DSeek=(SeekBar)findViewById(R.id.DSeekBarView);
+        PSeek.setMax(20000);
+        ISeek.setMax(20000);
+        DSeek.setMax(20000);
+
+        PSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar,int progress,boolean fromUser){
+                if(fromUser){
+                    PsetValue=progress/1000.0f;
+                    BigDecimal bigDecimal   =   new   BigDecimal(PsetValue);
+                    PsetValue=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).floatValue();
+                    PSet.setText(PsetValue+"");
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        ISeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar,int progress,boolean fromUser){
+                if(fromUser){
+                    IsetValue=progress/1000.0f;
+                    BigDecimal bigDecimal   =   new   BigDecimal(IsetValue);
+                    IsetValue=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).floatValue();
+                    ISet.setText(IsetValue+"");
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+
+
+        DSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar,int progress,boolean fromUser){
+                if(fromUser){
+                    DsetValue=progress/1000.0f;
+                    BigDecimal bigDecimal   =   new   BigDecimal(DsetValue);
+                    DsetValue=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).floatValue();
+                    DSet.setText(DsetValue+"");
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+        PShow=(TextView)findViewById(R.id.PShow_TV);
+        IShow=(TextView)findViewById(R.id.IShow_TV);
+        DShow=(TextView)findViewById(R.id.DShow_TV);
+        AngleShow=(TextView)findViewById(R.id.AngleShow_TV);
+        Update=(Button)findViewById(R.id.Update_BTN);
+        Update.setOnClickListener(this);
         Intent gattServiceIntent=new Intent(TestActivity.this,BLEService.class);
-//        bindService(gattServiceIntent,mServiceConnection,BIND_AUTO_CREATE);
-//        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        bindService(gattServiceIntent,mServiceConnection,BIND_AUTO_CREATE);
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
     @Override
     public void onClick(View v) {
         int id=v.getId();
-        if(id==R.id.btn_send_view){
-            String Tx;
-            Tx=ed_send.getText().toString();
-            mCharacteristic.setValue(Tx+'\n');
-            mBluetoothLeService.writeCharacteristic(mCharacteristic);
+
+        switch (id) {
+            case R.id.btn_send_view: {
+                String Tx;
+                Tx = ed_send.getText().toString();
+                mCharacteristic.setValue(Tx + '\n');
+                mBluetoothLeService.writeCharacteristic(mCharacteristic);
+                break;
+            }
+            case R.id.Update_BTN: {
+                Log.d("update","update");
+                waverView.addData(300);
+                break;
+            }
+            case R.id.PPlus_BTN:{
+                String PSetValueSTR;
+                PSetValueSTR=PSet.getText().toString();
+                PsetValue=Float.parseFloat(PSetValueSTR);
+                PsetValue+=0.001;
+                BigDecimal bigDecimal   =   new  BigDecimal(PsetValue);
+                PsetValue=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).floatValue();
+                PSet.setText(PsetValue+"");
+                break;
+            }
+            case R.id.PMinus_BTN:{
+                String PSetValueSTR;
+                PSetValueSTR=PSet.getText().toString();
+                PsetValue=Float.parseFloat(PSetValueSTR);
+                PsetValue-=0.001;
+                BigDecimal bigDecimal   =   new   BigDecimal(PsetValue);
+                PsetValue=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).floatValue();
+                PSet.setText(PsetValue+"");
+                break;
+            }
+            case R.id.IPlus_BTN:{
+                String ISetValueSTR;
+                ISetValueSTR=ISet.getText().toString();
+                IsetValue=Float.parseFloat(ISetValueSTR);
+                IsetValue+=0.001;
+                BigDecimal bigDecimal   =   new   BigDecimal(IsetValue);
+                IsetValue=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).floatValue();
+                ISet.setText(IsetValue+"");
+                break;
+            }
+            case R.id.IMinus_BTN:{
+                String ISetValueSTR;
+                ISetValueSTR=ISet.getText().toString();
+                IsetValue=Float.parseFloat(ISetValueSTR);
+                IsetValue-=0.001;
+                BigDecimal bigDecimal   =   new   BigDecimal(IsetValue);
+                IsetValue=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).floatValue();
+                ISet.setText(IsetValue+"");
+                break;
+            }
+            case R.id.DPlus_BTN:{
+                String DSetValueSTR;
+                DSetValueSTR=DSet.getText().toString();
+                DsetValue=Float.parseFloat(DSetValueSTR);
+                DsetValue+=0.001;
+                BigDecimal bigDecimal   =   new   BigDecimal(DsetValue);
+                DsetValue=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).floatValue();
+                DSet.setText(DsetValue+"");
+                break;
+            }
+            case R.id.DMinus_BTN:{
+                String DSetValueSTR;
+                DSetValueSTR=DSet.getText().toString();
+                DsetValue=Float.parseFloat(DSetValueSTR);
+                DsetValue-=0.001;
+                BigDecimal bigDecimal   =   new   BigDecimal(DsetValue);
+                DsetValue=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).floatValue();
+                DSet.setText(DsetValue+"");
+                DSet.setText(DsetValue+"");
+                break;
+            }
         }
     }
 
@@ -136,28 +322,10 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
                 String Rx=intent.getStringExtra(BLEService.EXTRA_DATA);
                 if(BLEService.RecIsDone) {
-                    String FrontDistance = intent.getStringExtra(BLEService.FRONT_DATA);
-                    String LeftDistance = intent.getStringExtra(BLEService.LEFT_DATA);
-                    String RightDistance = intent.getStringExtra(BLEService.RIGHT_DATA);
-                    FrontShow.setText("前:"+FrontDistance);
-                    LeftShow.setText("左:"+LeftDistance);
-                    RightShow.setText("右:"+RightDistance);
                     BLEService.RecIsDone = false;
                     BLEService.rec_state = BLEService.RecState.WAIT_F;
-                    Log.d("Rx_test","Front:"+FrontDistance);
-                    Log.d("Rx_test","Left:"+LeftDistance);
-                    Log.d("Rx_test","Right:"+RightDistance);
                 }
-                show+=Rx;
-                RecShow.setText(show);
-                i=RecShow.getLineCount();
-                i++;
-                if(i>=12){
-                    show="";
-                    i=0;
-                }
-
-
+                Log.d("rec",Rx+" ");
 
             } else if(BLEService.ACTION_DATA_READ.equals(action)){
 

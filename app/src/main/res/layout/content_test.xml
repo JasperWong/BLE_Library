@@ -29,14 +29,14 @@
         android:textColor="@color/black"
         android:layout_alignTop="@id/WaveView"
         android:layout_toRightOf="@id/WaveView"
-        android:layout_marginLeft="115dp" />
+        android:layout_marginLeft="100dp" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/PSet_ET"
         android:layout_toRightOf="@+id/PSet_TV"
         android:textSize="20dp"
-        android:text="0"
+        android:text="0.000"
         android:layout_marginTop="6dp"
         android:layout_marginLeft="10dp"
         />
@@ -49,23 +49,23 @@
         android:layout_marginTop="10dp"
         />
     <Button
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/minus_48px"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/PSet_TV"
         android:layout_marginTop="4dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginRight="20dp"
         android:id="@+id/PMinus_BTN"
         />
     <Button
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/plus_48px"
         android:layout_toRightOf="@id/WaveView"
         android:layout_alignTop="@id/PSet_TV"
         android:layout_marginTop="4dp"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="50dp"
         android:id="@+id/PPlus_BTN"
         />
 
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/ISet_ET"
         android:textSize="20dp"
-        android:text="0"
+        android:text="0.000"
         android:layout_marginTop="75dp"
         android:layout_alignLeft="@+id/PSet_ET"
         />
@@ -97,8 +97,8 @@
         android:layout_marginTop="10dp"
         />
     <Button
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/plus_48px"
         android:layout_alignLeft="@id/PPlus_BTN"
         android:layout_alignTop="@id/ISet_TV"
@@ -108,8 +108,8 @@
         />
 
     <Button
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/minus_48px"
         android:layout_alignTop="@id/IPlus_BTN"
         android:layout_alignLeft="@+id/PMinus_BTN"
@@ -132,7 +132,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/DSet_ET"
         android:textSize="20dp"
-        android:text="0"
+        android:text="0.000"
         android:layout_marginTop="145dp"
         android:layout_alignLeft="@+id/PSet_ET"
         />
@@ -145,8 +145,8 @@
         android:layout_marginTop="10dp"
         />
     <Button
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/plus_48px"
         android:layout_alignLeft="@id/PPlus_BTN"
         android:layout_alignTop="@id/DSet_TV"
@@ -154,8 +154,8 @@
         android:id="@+id/DPlus_BTN" />
 
     <Button
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/minus_48px"
         android:layout_alignTop="@id/DPlus_BTN"
         android:layout_alignLeft="@+id/PMinus_BTN"
