@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -29,11 +31,19 @@ import com.jasperwong.ble.ble.GATTUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TestActivity extends AppCompatActivity implements View.OnClickListener{
     private String TAG=this.getClass().getSimpleName();
     private BLEService mBluetoothLeService=null;
     BluetoothGattCharacteristic mCharacteristic=null;
+    final int HEIGHT = 200;
+    final int WIDTH = 320;
+    final int X_OFFSET = 0;
+    private int cx = X_OFFSET;
+    //实际的Y轴的位置
+    int centerY = HEIGHT / 2;
     private EditText ed_send;
     private Button btn_send;
     private Button PPlus;
@@ -57,6 +67,16 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private float IsetValue=0;
     private float DsetValue=0;
     private WaverView waverView=null;
+    Handler handler = null;
+    Timer send_timer = new Timer( );
+    TimerTask send_task = new TimerTask( ) {
+        public void run ( ){
+            Log.d("timer","inTimer");
+            waverView.addData(520);
+            waverView.postInvalidate();
+
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -65,6 +85,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_test);
 
         waverView=(WaverView)findViewById(R.id.WaveView);
+
         btn_send=(Button)findViewById(R.id.btn_send_view);
         btn_send.setOnClickListener(this);
         ed_send=(EditText)findViewById(R.id.edit_send_view);
@@ -91,7 +112,34 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         PSeek.setMax(20000);
         ISeek.setMax(20000);
         DSeek.setMax(20000);
+        //waverView.setTarget(160);
 
+        send_timer.schedule(send_task,1000,50);
+        handler = new Handler() {
+
+            @Override
+            public void handleMessage(Message msg) {
+
+                switch (msg.what) {
+
+                    case 1:
+                        int length = msg.arg1;
+                        byte[] buffer = (byte[])(msg.obj);
+
+                        for(int i=0;i< length;i++)
+                        {
+//                            waverView.addData(buffer[i]);
+                            waverView.addData(222);
+                        }
+                        break;
+                    case 2:
+                        //toastUtil.showToast((String)(msg.obj));
+                        break;
+                }
+
+                super.handleMessage(msg);
+            }
+        };
         PSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
             public void onProgressChanged(SeekBar seekBar,int progress,boolean fromUser){
@@ -173,6 +221,28 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
+
+    @Override
+    protected void onResume() {
+        if (send_timer == null)
+        {
+            send_timer.schedule(send_task,1000,50);
+        }
+        super.onResume();
+    }
+
+    protected void onDestroy ( ) {
+        if (send_timer != null)
+        {
+            send_timer.cancel();
+            send_timer = null;
+        }
+        super.onDestroy( );
+    }
+
+
+
+
     @Override
     public void onClick(View v) {
         int id=v.getId();
@@ -186,9 +256,13 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.Update_BTN: {
+
+                mCharacteristic.setValue("P:"+PsetValue+" I"+IsetValue);
+                mBluetoothLeService.writeCharacteristic(mCharacteristic);
+                mCharacteristic.setValue(" D"+DsetValue+"\n");
+                mBluetoothLeService.writeCharacteristic(mCharacteristic);
+
                 Log.d("update","update");
-                waverView.addData(200);
-                waverView.postInvalidate();
                 break;
             }
             case R.id.PPlus_BTN:{

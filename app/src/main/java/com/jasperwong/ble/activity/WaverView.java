@@ -15,6 +15,7 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class WaverView extends View{
@@ -22,8 +23,8 @@ public class WaverView extends View{
     private int YPoint = 260;
     private float XScale = 8;  //刻度长度
     private float YScale = 40;
-    private int XLength = 380;
-    private int YLength = 240;
+    private int XLength = 300;
+    private int YLength = 200;
     int width = 0;
     int height = 0;
     int centerY = 0;
@@ -100,6 +101,8 @@ public class WaverView extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Log.d("timer","onDraw");
+
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true); //去锯齿
@@ -150,5 +153,7 @@ public class WaverView extends View{
                 canvas.drawLine(XPoint + (i-1) * XScale, centerY - data.get(i-1) * YScale,XPoint + i * XScale, centerY - data.get(i) * YScale, paint);
             }
         }
+
+
     }
 }
