@@ -29,7 +29,10 @@ import com.jasperwong.ble.R;
 import com.jasperwong.ble.ble.BLEService;
 import com.jasperwong.ble.ble.GATTUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,6 +72,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
     private WaverView waverView=null;
     Handler handler = null;
     Timer send_timer = new Timer( );
+    ArrayList<InputStream> inputStreamArrayList = new ArrayList<InputStream>();
     TimerTask send_task = new TimerTask( ) {
         public void run ( ){
             Log.d("timer","inTimer");
@@ -257,9 +261,28 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             }
             case R.id.Update_BTN: {
 
+//                byte[] PsetValue2Byte=float2byte(PsetValue);
+//                byte[] IsetValue2Byte=float2byte(IsetValue);
+//                byte[] DsetValue2Byte=float2byte(DsetValue);
+//                byte[] data=new byte[19];
+
+//                data[3]=' ';
+//                data[4]='I';
+//                data[5]=(byte)IsetValue;
+//                data[6]=' ';
+//                data[7]='D';
+//                data[8]=(byte)DsetValue;
+//                data[9]='\n';
+//                InputStream inputStream=new ByteArrayInputStream(data);
+//                inputStreamArrayList.add(inputStream);
+
+
+
+
                 mCharacteristic.setValue("P:"+PsetValue+" I"+IsetValue);
                 mBluetoothLeService.writeCharacteristic(mCharacteristic);
                 mCharacteristic.setValue(" D"+DsetValue+"\n");
+//                mCharacteristic.setValue("P:"+PsetValue2Byte+" I"+IsetValue2Byte+" D"+DsetValue2Byte+'\n');
                 mBluetoothLeService.writeCharacteristic(mCharacteristic);
 
                 Log.d("update","update");
@@ -340,6 +363,34 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         return intentFilter;
     }
 
+    public static byte[] float2byte(float f) {
+
+        // 把float转换为byte[]
+        int fbit = Float.floatToIntBits(f);
+
+        byte[] b = new byte[4];
+        for (int i = 0; i < 4; i++) {
+            b[i] = (byte) (fbit >> (24 - i * 8));
+        }
+
+        // 翻转数组
+        int len = b.length;
+        // 建立一个与源数组元素类型相同的数组
+        byte[] dest = new byte[len];
+        // 为了防止修改源数组，将源数组拷贝一份副本
+        System.arraycopy(b, 0, dest, 0, len);
+        byte temp;
+        // 将顺位第i个与倒数第i个交换
+        for (int i = 0; i < len / 2; ++i) {
+            temp = dest[i];
+            dest[i] = dest[len - i - 1];
+            dest[len - i - 1] = temp;
+        }
+
+        return dest;
+
+    }
+
     private final ServiceConnection mServiceConnection = new ServiceConnection()
     {
         @Override
@@ -397,8 +448,17 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
                 String Rx=intent.getStringExtra(BLEService.EXTRA_DATA);
                 if(BLEService.RecIsDone) {
+
+//                    BLEService.rec_state = BLEService.RecState.WAIT_F;
+                    String PData = intent.getStringExtra(BLEService.P_DATA);
+                    if(PData!=null) PShow.setText("P: "+PData);
+                    String IData = intent.getStringExtra(BLEService.I_DATA);
+                    if(IData!=null)  IShow.setText("I: "+IData);
+                    String DData = intent.getStringExtra(BLEService.D_DATA);
+                    if(DData!=null) DShow.setText("D: "+DData);
+                    String AngleData = intent.getStringExtra(BLEService.ANGLE_DATA);
+                    if(AngleData!=null) AngleShow.setText("ANGLE: "+AngleData);
                     BLEService.RecIsDone = false;
-                    BLEService.rec_state = BLEService.RecState.WAIT_F;
                 }
                 Log.d("rec",Rx+" ");
 

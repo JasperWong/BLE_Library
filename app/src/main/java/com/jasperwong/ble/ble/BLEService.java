@@ -80,26 +80,39 @@ public class BLEService extends Service
             .fromString(SampleGattAttributes.BLE_RX);
     public final static UUID UUID_BLE_SERVICE = UUID
             .fromString(SampleGattAttributes.BLE_SERVICE);
-    public final static String FRONT_DATA =
-            "com.example.bluetooth.le.FRONT_DATA";
-    public final static String RIGHT_DATA =
-            "com.example.bluetooth.le.RIGHT_DATA";
-    public final static String LEFT_DATA =
-            "com.example.bluetooth.le.LEFT_DATA";
+    public final static String P_DATA =
+            "com.example.bluetooth.le.P_DATA";
+    public final static String I_DATA =
+            "com.example.bluetooth.le.I_DATA";
+    public final static String D_DATA =
+            "com.example.bluetooth.le.D_DATA";
+    public final static String ANGLE_DATA =
+            "com.example.bluetooth.le.ANGLE_DATA";
 
 
     public  enum  RecState{
-        WAIT_F,
+        WAIT_START,
+        WAIT_I,
+        WAIT_P,
         WAIT_COLON,
-        WAIT_BLANK1,
-        WAIT_L,
-        WAIT_BLANK2,
-        WAIT_R,
+        WAIT_COLON_I,
+        WAIT_P_DATA,
+        WAIT_D,
+        WAIT_I_DATA,
+        WAIT_A,
+        WAIT_D_DATA,
+        WAIT_ANGLE_DATA,
         WAIT_NEWLINE,
         PARSE_PENDING;
     };
 
-    public static RecState rec_state=RecState.WAIT_F;
+    private String PValueStr;
+    private String IValueStr;
+    private String DValueStr;
+    private String AngleValueStr;
+
+
+    public static RecState rec_state=RecState.WAIT_P;
 
     public static boolean RecIsDone=false;
 
@@ -212,94 +225,103 @@ public class BLEService extends Service
     {
         final Intent intent = new Intent(action);
         final byte[] data = characteristic.getValue();
-        String FrontDistance;
-        String LeftDistance;
-        String RightDistance;
-        final StringBuilder Front=new StringBuilder();
-        final StringBuilder Left=new StringBuilder();
-        final StringBuilder Right=new StringBuilder();
-
+        String PData;
+        String IData;
+        String DData;
+        final StringBuilder P_SB=new StringBuilder();
+        final StringBuilder I_SB=new StringBuilder();
+        final StringBuilder D_SB=new StringBuilder();
+        final StringBuilder A_SB=new StringBuilder();
+        if (UUID_BLE_RX.equals(characteristic.getUuid())) {
 //        Log.d("usart",data+"");
-        if (!RecIsDone&&data != null && data.length > 0) {
-           for(byte byteChar :data){
-                switch(rec_state){
-                    case WAIT_F: {
-                        if(byteChar=='F') rec_state = RecState.WAIT_COLON;
-                        else rec_state=RecState.WAIT_F;
-                        break;
-                    }
-                    case WAIT_COLON:{
-                        if(byteChar==':')   rec_state = RecState.WAIT_BLANK1;
-                        break;
+            if (!RecIsDone && data != null && data.length > 0) {
+                for (byte byteChar : data) {
+                    switch (rec_state) {
+                        case WAIT_P: {
+                            if (byteChar == 'P') rec_state = RecState.WAIT_COLON;
+                            else if (byteChar == 'I') rec_state = RecState.WAIT_COLON_I;
+                            break;
+                        }
+                        case WAIT_COLON: {
+                            if (byteChar == ':') {
+                                P_SB.delete(0, P_SB.length());
+                                D_SB.delete(0, D_SB.length());
+//                                REC_WHAT = REC_FRONT;
+                                rec_state = RecState.WAIT_P_DATA;
+                            }
+                            break;
+                        }
+                        case WAIT_P_DATA: {
+                            if (byteChar == ' ') rec_state = RecState.WAIT_D;
+                            else P_SB.append(String.format("%c", byteChar));
+                            break;
+                        }
+                        case WAIT_D: {
+                            if (byteChar == 'D') rec_state = RecState.WAIT_D_DATA;
+                            else rec_state = RecState.WAIT_D;
+                            break;
+                        }
+                        case WAIT_D_DATA: {
+                            if (byteChar =='\n'||byteChar=='\r') {
+                                PValueStr=P_SB.toString();
+                                DValueStr=D_SB.toString();
+                                intent.putExtra(P_DATA,PValueStr);
+                                intent.putExtra(D_DATA,DValueStr);
+                                rec_state = RecState.PARSE_PENDING;
+                            }
+                            else D_SB.append(String.format("%c", byteChar));
+                            break;
+                        }
+
+
+                        case PARSE_PENDING: {
+                            RecIsDone = true;
+//                        Log.d("rx_init","front:"+FrontDistance+" "+"left:"+LeftDistance+" "+"right:"+RightDistance);
+                            rec_state = RecState.WAIT_P;
+                            break;
+                        }
+
+                        case WAIT_COLON_I:{
+                            I_SB.delete(0,I_SB.length());
+                            A_SB.delete(0,A_SB.length());
+                            if(byteChar==':') rec_state=RecState.WAIT_I_DATA;
+                            else ;
+                            break;
+                        }
+                        case WAIT_I_DATA:{
+                            if(byteChar==' ') rec_state=RecState.WAIT_A;
+                            else I_SB.append(String.format("%c",byteChar));
+                        }
+                        case WAIT_A:{
+                            if(byteChar=='A') rec_state=RecState.WAIT_ANGLE_DATA;
+                            else;
+                            break;
+                        }
+                        case WAIT_ANGLE_DATA:{
+                            if(byteChar=='\n'||byteChar=='\r') {
+                                IValueStr=I_SB.toString();
+                                AngleValueStr=A_SB.toString();
+                                intent.putExtra(I_DATA,IValueStr);
+                                intent.putExtra(ANGLE_DATA,AngleValueStr);
+                                rec_state=RecState.PARSE_PENDING;
+                            }
+                            else A_SB.append(String.format("%c",byteChar));
+                            break;
+                        }
+
+                        default: {
+
+                            break;
+                        }
                     }
 
-                    case WAIT_BLANK1:{
-                        if(byteChar==' ') rec_state=RecState.WAIT_L;
-                        else Front.append(String.format("%c",byteChar));
-                        break;
-                    }
-                    case WAIT_L: {
-                        if(byteChar=='L') rec_state = RecState.WAIT_BLANK2;
-                        else rec_state=RecState.WAIT_L;
-                        break;
-                    }
-                    case WAIT_BLANK2:{
-                        if(byteChar==' ') rec_state=RecState.WAIT_R;
-                        else Left.append(String.format("%c",byteChar));
-                        break;
-                    }
-                    case WAIT_R: {
-                        if(byteChar=='R') rec_state = RecState.WAIT_NEWLINE;
-                        else rec_state=RecState.WAIT_R;
-                        break;
-                    }
-                    case WAIT_NEWLINE:{
-                        if(byteChar=='\n') rec_state=RecState.PARSE_PENDING;
-                        else Right.append(String.format("%c",byteChar));
-                        break;
-                    }
-                    case PARSE_PENDING: {
-                        RecIsDone=true;
-                        FrontDistance=Front.toString();
-                        LeftDistance=Left.toString();
-                        RightDistance=Right.toString();
-                        Log.d("rx_init","front:"+FrontDistance+" "+"left:"+LeftDistance+" "+"right:"+RightDistance);
-                        intent.putExtra(FRONT_DATA,FrontDistance);
-                        intent.putExtra(LEFT_DATA,LeftDistance);
-                        intent.putExtra(RIGHT_DATA,RightDistance);
-                        Front.delete(0,Front.length());
-                        Left.delete(0,Left.length());
-                        Right.delete(0,Right.length());
-                        rec_state=RecState.WAIT_F;
-                        break;
-                    }
 
-                    default:{
-
-                        break;
-                    }
                 }
 
-
             }
-
-
-//            for(byte byteChar : data)
-//                stringBuilder.append(String.format("%02X ", byteChar));
-//            intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
-
-//            String string=new String("ring");
-//
-//            if(new String(data).equals(string)){
-////                Intent intentCall = new Intent(Intent.ACTION_CALL);
-////                intentCall.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-////                intentCall.setData(Uri.parse("tel:123"));
-////                startActivity(intentCall);
-//            }
-
+            intent.putExtra(EXTRA_DATA, new String(data));
+            Log.d("usart", new String(data));
         }
-        intent.putExtra(EXTRA_DATA,new String(data));
-        Log.d("usart",new String(data));
         sendBroadcast(intent);
     }
 
